@@ -1,0 +1,26 @@
+# The keys that are pressed and released when the controller button is pressed
+keyboard:
+- A = "space"
+- B = "t"
+- X = "tab"
+- Y = "f"
+- LS = "ctrl+w"
+- UP = "f5"
+- LEFT = "left"
+- RIGHT = "right"
+- BACK = "esc"
+- START = "win"
+
+# The keys that are held down when the controller button is held
+keyboard-holdable:
+- RB = "shift"
+- LB = "ctrl"
+- DOWN = "alt"
+
+# Mouse buttons assigned
+mouse:
+- RT = "mb_left"
+- LT = "mb_right"
+
+# Controller button to terminate script
+terminator: rs
