@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Bindings {
 
-    private final HashMap<Button, Binding> bindings = new HashMap<>();
+    private final HashMap<Button, KeyMap> bindings = new HashMap<>();
 
     public Bindings() {
         loadDefaultBindings();
@@ -27,112 +27,136 @@ public class Bindings {
     }
 
 
-    // todo docs
-    public Binding getBinding(Button button) {
-        Binding binding = bindings.get(button);
-        if (binding == null) return new Binding(Binding.Type.NONE, "");
-        return binding;
+    /**
+     * Return the KeyMap associated with the relevant Button
+     * @param button the button object with an associated KeyMap
+     * @return the KeyMap object containing the type and map of the binding, returns an empty map of type
+     * {@link KeyMap.Type#NONE NONE} if there is no association
+     */
+    public KeyMap getBinding(Button button) {
+        KeyMap keyMap = bindings.get(button);
+        if (keyMap == null) return new KeyMap(KeyMap.Type.NONE, "");
+        return keyMap;
     }
 
-    // todo docs
+    /**
+     * Display all bindings currently loaded and active to the console
+     */
     public void printBindings() {
         System.out.println("BUTTON: BINDING_TYPE \"key+map\"");
 
+        // Load all the button values and sort them into the correct order
         Button[] correctOrder = Button.values();
         Arrays.sort(correctOrder);
 
+        // For each button type (excluding NONE) find the relevant button in the loaded bindings and display it neatly
         for (Button orderedButton : correctOrder) {
             if (!orderedButton.equals(Button.NONE)) {
                 for (Button button : bindings.keySet()) {
                     if (orderedButton.equals(button)) {
-                        Binding binding = getBinding(button);
-                        System.out.println(button.name() + ": " + binding.type().name() + " \"" + binding.keyMap() + "\"");
+                        KeyMap keyMap = getBinding(button);
+                        System.out.println(button.name() + ": " + keyMap.type().name() + " \"" + keyMap.keyMap() + "\"");
                     }
                 }
             }
         }
     }
 
-    // todo docs
     public void loadBindingsFromFile(String filename) throws FileNotFoundException {
         loadBindingsFromFile(new File(filename));
     }
 
-    // todo docs
     public void loadBindingsFromFile(File file) throws FileNotFoundException {
         System.out.println("Loading bindings from file '" + file.getName() + "'");
         try {
-            HashMap<Button, Binding> updatedBindings = loadBindingMapFromFile(file);
+            HashMap<Button, KeyMap> updatedBindings = loadBindingMapFromFile(file);
             // Only empty previous bindings if the new bindings were successfully loaded
             loadEmptyBindings();
             bindings.putAll(updatedBindings);
             System.out.println("Bindings successfully loaded!\n");
             printBindings();
         } catch (InvalidBindingsFileException invalidFile) {
+            // Since the file was determined to be invalid and has not caused a runtime error it is safe
+            // to display the error to the user and continue to execute the code
             invalidFile.printStackTrace();
         }
     }
 
-    // todo docs
-    private HashMap<Button, Binding> loadBindingMapFromFile(File file)
+    /**
+     * Backend method to load the contents of a bindings file.
+     * @param file File to load the bindings from
+     * @return Map of Buttons to their relevant KeyMaps
+     * @throws InvalidBindingsFileException If the bindings file has a syntax error that could not be handled
+     * or contains invalid values
+     */
+    private HashMap<Button, KeyMap> loadBindingMapFromFile(File file)
             throws FileNotFoundException, InvalidBindingsFileException {
-        HashMap<Button, Binding> updatedBindings = new HashMap<>();
+        // Map to store the new bindings from the file
+        HashMap<Button, KeyMap> updatedBindings = new HashMap<>();
 
         Scanner scanner = new Scanner(file);
         int lineNum = 0;
+        // Used to determine if the bindings file has defined a terminator button.
+        // This is required as there is currently no other user-friendly way to terminate the script.
+        // If a GUI is added later on remove this and associated lines.
         boolean terminatorFound = false;
 
-        Binding.Type currentType = Binding.Type.NONE;
+        // Tracks the type of the keymaps being read at any given time
+        KeyMap.Type currentType = KeyMap.Type.NONE;
 
+        // Iterate through each line in the file
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            lineNum++;
+            lineNum++; // Keep track of line numbers for error messages
+
             // If the line isn't a comment or blank
             if (!(line.startsWith("#") || line.isBlank())) {
                 // Set to lowercase and remove blank space
                 String lineLowerNoBlankSpace = line.toLowerCase().replaceAll("\\s", "");
-                // todo remove commented
-//                System.out.println("LOADING LINE: " + lineLowerNoBlankSpace);
-                // If the line is defining a binding type
+
+                // If the line is defining a keymap type
                 if (lineLowerNoBlankSpace.endsWith(":")) {
                     currentType = switch (lineLowerNoBlankSpace) {
-                        case "keyboard-holdable:" -> Binding.Type.KEYBOARD_HOLDABLE;
-                        case "keyboard:" -> Binding.Type.KEYBOARD;
-                        case "mouse:", "mouse-button:", "mouse-buttons:" -> Binding.Type.MOUSE_BUTTON;
+                        case "keyboard-holdable:" -> KeyMap.Type.KEYBOARD_HOLDABLE;
+                        case "keyboard:" -> KeyMap.Type.KEYBOARD;
+                        case "mouse:", "mouse-button:", "mouse-buttons:" -> KeyMap.Type.MOUSE_BUTTON;
                         default -> throw new InvalidBindingsFileException(file.getName(), "Invalid binding type '" + line.substring(0, line.length() - 1) + "'", lineNum);
                     };
                 }
-                // If the binding type has been defined and the line is defining a binding
-                else if (!currentType.equals(Binding.Type.NONE) && lineLowerNoBlankSpace.startsWith("-") && lineLowerNoBlankSpace.endsWith("\"")) {
-                    // Split the line (minus the - at the start and the " at the end) by the first '="'
+
+                // If the line is defining a keymap and the type has been defined
+                else if (!currentType.equals(KeyMap.Type.NONE) && lineLowerNoBlankSpace.startsWith("-") && lineLowerNoBlankSpace.endsWith("\"")) {
+                    // Split the line (excluding the - at the start and the " at the end) by the first '="'
                     String[] bindingDefinition = lineLowerNoBlankSpace.substring(1, lineLowerNoBlankSpace.length()-1).split("=\"", 2);
                     // If there aren't two values then the format must be wrong
                     if (bindingDefinition.length != 2) throw new InvalidBindingsFileException(file.getName(), lineNum);
                     String buttonName = bindingDefinition[0];
                     String keyMap = bindingDefinition[1];
 
-
                     // If the key map isn't valid throw error
-                    if (((currentType.equals(Binding.Type.KEYBOARD) || currentType.equals(Binding.Type.KEYBOARD_HOLDABLE)) && !Keyboard.validateMap(keyMap))
-                            || (currentType.equals(Binding.Type.MOUSE_BUTTON) && MouseButtons.getBoundButton(keyMap) == null))
+                    if (((currentType.equals(KeyMap.Type.KEYBOARD)
+                            || currentType.equals(KeyMap.Type.KEYBOARD_HOLDABLE)) && !Keyboard.validateMap(keyMap))
+                            || (currentType.equals(KeyMap.Type.MOUSE_BUTTON) && MouseButtons.getBoundButton(keyMap) == null))
                         throw new InvalidBindingsFileException(file.getName(), "Invalid key map '" + keyMap + "' for binding type " + currentType.name(), lineNum);
 
-                    Button buttonType = getButtonType(file, lineNum, buttonName);
+                    Button buttonType = getButtonType(file.getName(), lineNum, buttonName);
 
-                    // Add the new binding to the array, if the button has already been assigned a binding throw an error
-                    if (updatedBindings.put(buttonType, new Binding(currentType, keyMap)) != null)
+                    // Add the new binding to the hashmap, if the button has already been assigned a binding throw an error
+                    if (updatedBindings.put(buttonType, new KeyMap(currentType, keyMap)) != null)
                         throw new InvalidBindingsFileException(file.getName(), "The controller button '" + buttonType.name() + "' already has a binding assigned to it, error", lineNum);
                 }
+
                 // If the line is defining the terminator
                 else if (lineLowerNoBlankSpace.startsWith("terminator:")) {
                     String buttonName = lineLowerNoBlankSpace.replaceFirst("terminator:", "");
-                    Button buttonType = getButtonType(file, lineNum, buttonName);
+                    Button buttonType = getButtonType(file.getName(), lineNum, buttonName);
 
                     // Add the new binding to the array, if the button has already been assigned a binding throw an error
-                    if (updatedBindings.put(buttonType, new Binding(Binding.Type.TERMINATOR, "")) != null)
+                    if (updatedBindings.put(buttonType, new KeyMap(KeyMap.Type.TERMINATOR, "")) != null)
                         throw new InvalidBindingsFileException(file.getName(), "The controller button '" + buttonType.name() + "' already has a binding assigned to it, error", lineNum);
                     terminatorFound = true;
                 }
+
                 // If the line is invalid (it isn't a comment, isn't empty, isn't defining a binding type, isn't defining
                 // a terminator, isn't defining a binding, or a binding type hasn't been defined)
                 else {
@@ -151,50 +175,60 @@ public class Bindings {
         return updatedBindings;
     }
 
-    // todo docs (not to be used by anything other than loadBindingMapFromFile)
-    private static Button getButtonType(File file, int lineNum, String buttonName) throws InvalidBindingsFileException {
+    /**
+     * THIS METHOD MUST ONLY BE USED IN {@link Bindings#loadBindingMapFromFile(File)}
+     * @param filename for error message
+     * @param lineNum for error message
+     * @param buttonName to get the type from
+     */
+    private static Button getButtonType(String filename, int lineNum, String buttonName) throws InvalidBindingsFileException {
         Button buttonType;
         try {
             buttonType = Button.valueOf(buttonName.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new InvalidBindingsFileException(file.getName(), "Invalid button type '" + buttonName.toUpperCase() + "'", lineNum);
+            throw new InvalidBindingsFileException(filename, "Invalid button type '" + buttonName.toUpperCase() + "'", lineNum);
         }
         return buttonType;
     }
 
-    // todo docs
+    /**
+     * Load predefined bindings
+     */
     public void loadDefaultBindings() {
         System.out.println("Loading default bindings");
         loadEmptyBindings();
 
         // Normal keyboard shortcut presses
-        bindings.put(Button.A, new Binding(Binding.Type.KEYBOARD, "space"));
-        bindings.put(Button.B, new Binding(Binding.Type.KEYBOARD, "t"));
-        bindings.put(Button.X, new Binding(Binding.Type.KEYBOARD, "tab"));
-        bindings.put(Button.Y, new Binding(Binding.Type.KEYBOARD, "f"));
-        bindings.put(Button.LS, new Binding(Binding.Type.KEYBOARD, "ctrl+w"));
-        bindings.put(Button.UP, new Binding(Binding.Type.KEYBOARD, "f5"));
-        bindings.put(Button.LEFT, new Binding(Binding.Type.KEYBOARD, "left"));
-        bindings.put(Button.RIGHT, new Binding(Binding.Type.KEYBOARD, "right"));
-        bindings.put(Button.BACK, new Binding(Binding.Type.KEYBOARD, "esc"));
+        bindings.put(Button.A, new KeyMap(KeyMap.Type.KEYBOARD, "space"));
+        bindings.put(Button.B, new KeyMap(KeyMap.Type.KEYBOARD, "t"));
+        bindings.put(Button.X, new KeyMap(KeyMap.Type.KEYBOARD, "tab"));
+        bindings.put(Button.Y, new KeyMap(KeyMap.Type.KEYBOARD, "f"));
+        bindings.put(Button.LS, new KeyMap(KeyMap.Type.KEYBOARD, "ctrl+w"));
+        bindings.put(Button.UP, new KeyMap(KeyMap.Type.KEYBOARD, "f5"));
+        bindings.put(Button.LEFT, new KeyMap(KeyMap.Type.KEYBOARD, "left"));
+        bindings.put(Button.RIGHT, new KeyMap(KeyMap.Type.KEYBOARD, "right"));
+        bindings.put(Button.BACK, new KeyMap(KeyMap.Type.KEYBOARD, "esc"));
         
         // Holdable keyboard presses
-        bindings.put(Button.LB, new Binding(Binding.Type.KEYBOARD_HOLDABLE, "ctrl"));
-        bindings.put(Button.RB, new Binding(Binding.Type.KEYBOARD_HOLDABLE, "shift"));
-        bindings.put(Button.DOWN, new Binding(Binding.Type.KEYBOARD_HOLDABLE, "alt"));
+        bindings.put(Button.LB, new KeyMap(KeyMap.Type.KEYBOARD_HOLDABLE, "ctrl"));
+        bindings.put(Button.RB, new KeyMap(KeyMap.Type.KEYBOARD_HOLDABLE, "shift"));
+        bindings.put(Button.DOWN, new KeyMap(KeyMap.Type.KEYBOARD_HOLDABLE, "alt"));
 
         // Mouse buttons
-        bindings.put(Button.RT, new Binding(Binding.Type.MOUSE_BUTTON, "mb_left"));
-        bindings.put(Button.LT, new Binding(Binding.Type.MOUSE_BUTTON, "mb_right"));
+        bindings.put(Button.RT, new KeyMap(KeyMap.Type.MOUSE_BUTTON, "mb_left"));
+        bindings.put(Button.LT, new KeyMap(KeyMap.Type.MOUSE_BUTTON, "mb_right"));
 
         // Terminator buttons
-        bindings.put(Button.RS, new Binding(Binding.Type.TERMINATOR, ""));
+        bindings.put(Button.RS, new KeyMap(KeyMap.Type.TERMINATOR, ""));
 
         System.out.println("Default bindings loaded!\n");
         printBindings();
     }
 
-    // todo docs
+    /**
+     * Empty the loaded bindings. Resets all buttons to null. This must be used when changing bindings if unchanged
+     * previous bindings are not supposed to persist.
+     */
     public void loadEmptyBindings() {
         bindings.put(Button.A, null);
         bindings.put(Button.B, null);

@@ -1,7 +1,7 @@
 package com.github.bobcat33.gamepadmousecontroller.output.components.mouse;
 
 import com.github.bobcat33.gamepadmousecontroller.output.components.OutputComponent;
-import com.github.bobcat33.gamepadmousecontroller.output.components.binding.Binding;
+import com.github.bobcat33.gamepadmousecontroller.output.components.binding.KeyMap;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -32,21 +32,21 @@ public class MouseButtons extends OutputComponent {
 
     /**
      * Press mouse button associated with the controller button
-     * @throws InvalidMouseButtonException if the binding does not have an associated button mask
+     * @throws InvalidMouseButtonException if the keyMap does not have an associated button mask
      */
-    public void press(Binding binding) {
-        Integer buttonMask = getBoundButton(binding.keyMap());
-        if (buttonMask == null) throw new InvalidMouseButtonException(binding);
+    public void press(KeyMap keyMap) {
+        Integer buttonMask = getBoundButton(keyMap.keyMap());
+        if (buttonMask == null) throw new InvalidMouseButtonException(keyMap);
         robot.mousePress(buttonMask);
     }
 
     /**
      * Release mouse button associated with the controller button
-     * @throws InvalidMouseButtonException if the binding does not have an associated button mask
+     * @throws InvalidMouseButtonException if the keyMap does not have an associated button mask
      */
-    public void release(Binding binding) {
-        Integer buttonMask = getBoundButton(binding.keyMap());
-        if (buttonMask == null) throw new InvalidMouseButtonException(binding);
+    public void release(KeyMap keyMap) {
+        Integer buttonMask = getBoundButton(keyMap.keyMap());
+        if (buttonMask == null) throw new InvalidMouseButtonException(keyMap);
         robot.mouseRelease(buttonMask);
     }
 }

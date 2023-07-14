@@ -4,7 +4,7 @@ import com.github.bobcat33.gamepadmousecontroller.input.components.Button;
 import com.github.bobcat33.gamepadmousecontroller.input.components.ButtonState;
 import com.github.bobcat33.gamepadmousecontroller.input.ControllerInputListener;
 import com.github.bobcat33.gamepadmousecontroller.input.components.Joystick;
-import com.github.bobcat33.gamepadmousecontroller.output.components.binding.Binding;
+import com.github.bobcat33.gamepadmousecontroller.output.components.binding.KeyMap;
 import com.github.bobcat33.gamepadmousecontroller.output.components.binding.Bindings;
 import com.github.bobcat33.gamepadmousecontroller.output.components.keyboard.Keyboard;
 import com.github.bobcat33.gamepadmousecontroller.output.components.mouse.AlreadyRunningException;
@@ -84,7 +84,7 @@ public class OutputManager implements ControllerInputListener {
     public boolean buttonPressed(Button button) {
         // todo comment removal
 //        System.out.println("Pressed: " + button.toString());
-        Binding binding = bindings.getBinding(button);
+        KeyMap keyMap = bindings.getBinding(button);
         /*// Determine action for button
         switch (button) {
             // Buttons that can be held
@@ -96,10 +96,10 @@ public class OutputManager implements ControllerInputListener {
         }*/
 
         boolean terminate = false;
-        switch (binding.type()) {
-            case KEYBOARD -> keyboard.pressBinding(binding);
-            case KEYBOARD_HOLDABLE -> keyboard.holdBinding(binding);
-            case MOUSE_BUTTON -> mouseButtons.press(binding);
+        switch (keyMap.type()) {
+            case KEYBOARD -> keyboard.pressBinding(keyMap);
+            case KEYBOARD_HOLDABLE -> keyboard.holdBinding(keyMap);
+            case MOUSE_BUTTON -> mouseButtons.press(keyMap);
             case TERMINATOR -> terminate = true;
         }
         // Terminate controller input manager if button pressed is the Right Stick
@@ -110,7 +110,7 @@ public class OutputManager implements ControllerInputListener {
     public boolean buttonReleased(Button button) {
         // todo comment removal
 //        System.out.println("Released: " + button.toString());
-        Binding binding = bindings.getBinding(button);
+        KeyMap keyMap = bindings.getBinding(button);
         /*// Determine action for button
         switch (button) {
             // Buttons that can be held
@@ -119,9 +119,9 @@ public class OutputManager implements ControllerInputListener {
             case LT, RT -> mouseButtons.release(button);
         }*/
 
-        switch (binding.type()) {
-            case KEYBOARD_HOLDABLE -> keyboard.releaseBinding(binding);
-            case MOUSE_BUTTON -> mouseButtons.release(binding);
+        switch (keyMap.type()) {
+            case KEYBOARD_HOLDABLE -> keyboard.releaseBinding(keyMap);
+            case MOUSE_BUTTON -> mouseButtons.release(keyMap);
         }
 
         return false;

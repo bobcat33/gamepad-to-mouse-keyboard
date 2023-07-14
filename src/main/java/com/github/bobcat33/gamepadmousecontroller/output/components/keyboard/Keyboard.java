@@ -2,7 +2,7 @@ package com.github.bobcat33.gamepadmousecontroller.output.components.keyboard;
 
 import com.github.bobcat33.gamepadmousecontroller.input.components.Button;
 import com.github.bobcat33.gamepadmousecontroller.output.components.OutputComponent;
-import com.github.bobcat33.gamepadmousecontroller.output.components.binding.Binding;
+import com.github.bobcat33.gamepadmousecontroller.output.components.binding.KeyMap;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -52,28 +52,28 @@ public class Keyboard extends OutputComponent {
 
     // todo doc
     /**
-     * Press and release the binding associated with a button
+     * Press and release the keyMap associated with a button
      */
-    public void pressBinding(Binding binding) {
-        pressKeyMap(binding.keyMap());
+    public void pressBinding(KeyMap keyMap) {
+        pressKeyMap(keyMap.keyMap());
     }
 
     // todo doc
     /**
-     * Press down the binding associated with a button and don't release
+     * Press down the keyMap associated with a button and don't release
      */
-    public void holdBinding(Binding binding) {
-        String map = binding.keyMap();
+    public void holdBinding(KeyMap keyMap) {
+        String map = keyMap.keyMap();
         heldKeyMaps.add(map);
         holdKeyMap(map);
     }
 
     // todo doc
     /**
-     * Release the binding associated with a button, releases the binding in reverse order
+     * Release the keyMap associated with a button, releases the keyMap in reverse order
      */
-    public void releaseBinding(Binding binding) {
-        String map = binding.keyMap();
+    public void releaseBinding(KeyMap keyMap) {
+        String map = keyMap.keyMap();
         heldKeyMaps.remove(map);
         releaseKeyMap(map);
     }
