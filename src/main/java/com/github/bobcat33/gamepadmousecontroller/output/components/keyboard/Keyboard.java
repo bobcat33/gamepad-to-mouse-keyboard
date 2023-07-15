@@ -1,6 +1,5 @@
 package com.github.bobcat33.gamepadmousecontroller.output.components.keyboard;
 
-import com.github.bobcat33.gamepadmousecontroller.input.components.Button;
 import com.github.bobcat33.gamepadmousecontroller.output.components.OutputComponent;
 import com.github.bobcat33.gamepadmousecontroller.output.components.binding.KeyMap;
 
@@ -20,68 +19,34 @@ public class Keyboard extends OutputComponent {
         super(robot);
     }
 
-    // todo remove
     /**
-     * Get the key binding associated with a button
-     * @return String map of the key binding associated with the button
-     */
-    @Deprecated
-    public String getBinding(Button button) {
-
-        return switch (button) {
-            // COMMANDS (FULL BINDS)
-            case UP -> "f5";
-            case LS -> "ctrl+w";
-            // PRESSABLE (SINGLE KEYS)
-            case Y -> "f";
-            case B -> "t";
-            case A -> "space";
-            case LEFT -> "left";
-            case RIGHT -> "right";
-            case X -> "tab";
-            case BACK -> "esc";
-            // HOLDABLE (ONLY COMMAND KEYS)
-            case LB -> "ctrl";
-            case RB -> "shift";
-            case DOWN -> "alt";
-
-            default -> "";
-        };
-
-    }
-
-    // todo doc
-    /**
-     * Press and release the keyMap associated with a button
+     * Press and release the KeyMap. Keys/Buttons are released in reverse order
      */
     public void pressBinding(KeyMap keyMap) {
-        pressKeyMap(keyMap.keyMap());
+        pressKeyMap(keyMap.map());
     }
 
-    // todo doc
     /**
-     * Press down the keyMap associated with a button and don't release
+     * Press down the {@link KeyMap} and don't release
      */
     public void holdBinding(KeyMap keyMap) {
-        String map = keyMap.keyMap();
+        String map = keyMap.map();
         heldKeyMaps.add(map);
         holdKeyMap(map);
     }
 
-    // todo doc
     /**
-     * Release the keyMap associated with a button, releases the keyMap in reverse order
+     * Release the {@link KeyMap}, releases the keys/buttons in reverse order
      */
     public void releaseBinding(KeyMap keyMap) {
-        String map = keyMap.keyMap();
+        String map = keyMap.map();
         heldKeyMaps.remove(map);
         releaseKeyMap(map);
     }
 
-    // todo doc
     /**
-     * Release all bindings currently held down, release the bindings in the order they were pressed,
-     * each binding is released in reverse order
+     * Release all bindings currently held down, release the bindings in the order they were pressed.
+     * Each binding's keys are released in reverse order.
      */
     public void releaseAllBindings() {
         for (String keyMap : heldKeyMaps) releaseKeyMap(keyMap);
@@ -89,21 +54,13 @@ public class Keyboard extends OutputComponent {
     }
 
     /**
-     * Press and release the keys in the map. Pressed in order then released in reverse order.
+     * Press and release the keys in the map. Keys are pressed in order then released in reverse order.
      * @param map The string map of the keys in the binding
      */
     public void pressKeyMap(String map) {
         ArrayList<Integer> keyCodes = getKeyCodesFromMap(map);
 
-        // Todo If there are already held binds decide whether to straight up disallow non-single maps or temporarily release held keys, press the map, then hold the held keys again
-        // Option 1 would stop problems from occurring where one button is held and a command is executed
-        // Option 2 would allow for commands to be executed during execution of another but might not be as user intends
-        // A third option would be to change the whole system to change holding keys to option keys that change the bindings
-        // of the other keys when the held key is active.
-        // Fourth option is in the bindings have holding keys + single keys, then command keys with modifying keys
-        // Modifying keys would change command keys to have different bindings, like Fn key turning pause/play into F10
-        // Todo Decided to ignore this for now (except 4th option)
-        // Realised that if you wanted to have ctrl+t and ctrl+shift+t it would be easiest to just have shift as a modifier.
+        // This whole paragraph was just a useless attempt to mitigate user error, just gonna let the user press what they wanna press
 
         holdKeyMap(keyCodes);
 
@@ -153,7 +110,8 @@ public class Keyboard extends OutputComponent {
         ArrayList<Integer> keyCodes = new ArrayList<>();
         if (map.equals("")) return keyCodes;
 
-        map = map.replace(" ", "").toLowerCase();
+        // todo untested change from " " to "\\s"
+        map = map.replaceAll("\\s", "").toLowerCase();
         String[] keys = map.split("\\+");
 
         for (String key : keys) {
@@ -237,7 +195,7 @@ public class Keyboard extends OutputComponent {
             case "plus", "add" -> KeyEvent.VK_PLUS;
             case "sp", "space" -> KeyEvent.VK_SPACE;
             case "tab" -> KeyEvent.VK_TAB;
-            case "enter" -> KeyEvent.VK_ENTER;
+            case "rtrn", "return", "enter" -> KeyEvent.VK_ENTER;
             // CONTROL KEYS
             case "ctrl", "control" -> KeyEvent.VK_CONTROL;
             case "shift" -> KeyEvent.VK_SHIFT;
@@ -247,9 +205,9 @@ public class Keyboard extends OutputComponent {
             case "del", "delete" -> KeyEvent.VK_DELETE;
             case "esc", "escape" -> KeyEvent.VK_ESCAPE;
             case "win", "windows" -> KeyEvent.VK_WINDOWS;
-            case "capslock" -> KeyEvent.VK_CAPS_LOCK;
-            case "prntscrn", "printscreen" -> KeyEvent.VK_PRINTSCREEN;
-            case "insert" -> KeyEvent.VK_INSERT;
+            case "caps", "capslock" -> KeyEvent.VK_CAPS_LOCK;
+            case "prtsc", "prntscrn", "printscreen" -> KeyEvent.VK_PRINTSCREEN;
+            case "ins", "insert" -> KeyEvent.VK_INSERT;
             // NAVIGATION KEYS
             case "left" -> KeyEvent.VK_LEFT;
             case "right" -> KeyEvent.VK_RIGHT;
@@ -276,7 +234,10 @@ public class Keyboard extends OutputComponent {
         };
     }
 
-    // todo docs
+    /**
+     * Verify that a keymap string is valid
+     * @see <a href="https://github.com/bobcat33/GamepadMouseController/blob/master/src/main/java/com/github/bobcat33/gamepadmousecontroller/output/components/binding/Mapping Keywords.txt">List of mapping keywords</a>
+     */
     public static boolean validateMap(String map) {
         if (map.equals("")) return false;
 

@@ -33,7 +33,7 @@ public class Bindings {
      * @return the KeyMap object containing the type and map of the binding, returns an empty map of type
      * {@link KeyMap.Type#NONE NONE} if there is no association
      */
-    public KeyMap getBinding(Button button) {
+    public KeyMap getKeyMap(Button button) {
         KeyMap keyMap = bindings.get(button);
         if (keyMap == null) return new KeyMap(KeyMap.Type.NONE, "");
         return keyMap;
@@ -54,8 +54,8 @@ public class Bindings {
             if (!orderedButton.equals(Button.NONE)) {
                 for (Button button : bindings.keySet()) {
                     if (orderedButton.equals(button)) {
-                        KeyMap keyMap = getBinding(button);
-                        System.out.println(button.name() + ": " + keyMap.type().name() + " \"" + keyMap.keyMap() + "\"");
+                        KeyMap keyMap = getKeyMap(button);
+                        System.out.println(button.name() + ": " + keyMap.type().name() + " \"" + keyMap.map() + "\"");
                     }
                 }
             }
@@ -126,7 +126,7 @@ public class Bindings {
 
                 // If the line is defining a keymap and the type has been defined
                 else if (!currentType.equals(KeyMap.Type.NONE) && lineLowerNoBlankSpace.startsWith("-") && lineLowerNoBlankSpace.endsWith("\"")) {
-                    // Split the line (excluding the - at the start and the " at the end) by the first '="'
+                    // Split the line, excluding the - at the start and the " at the end, by the first ="
                     String[] bindingDefinition = lineLowerNoBlankSpace.substring(1, lineLowerNoBlankSpace.length()-1).split("=\"", 2);
                     // If there aren't two values then the format must be wrong
                     if (bindingDefinition.length != 2) throw new InvalidBindingsFileException(file.getName(), lineNum);

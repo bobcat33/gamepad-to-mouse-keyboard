@@ -32,20 +32,20 @@ public class MouseButtons extends OutputComponent {
 
     /**
      * Press mouse button associated with the controller button
-     * @throws InvalidMouseButtonException if the keyMap does not have an associated button mask
+     * @throws InvalidMouseButtonException if the KeyMap does not have an associated button mask
      */
     public void press(KeyMap keyMap) {
-        Integer buttonMask = getBoundButton(keyMap.keyMap());
+        Integer buttonMask = getBoundButton(keyMap.map());
         if (buttonMask == null) throw new InvalidMouseButtonException(keyMap);
         robot.mousePress(buttonMask);
     }
 
     /**
      * Release mouse button associated with the controller button
-     * @throws InvalidMouseButtonException if the keyMap does not have an associated button mask
+     * @throws InvalidMouseButtonException if the KeyMap does not have an associated button mask
      */
     public void release(KeyMap keyMap) {
-        Integer buttonMask = getBoundButton(keyMap.keyMap());
+        Integer buttonMask = getBoundButton(keyMap.map());
         if (buttonMask == null) throw new InvalidMouseButtonException(keyMap);
         robot.mouseRelease(buttonMask);
     }

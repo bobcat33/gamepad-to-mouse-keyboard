@@ -53,12 +53,10 @@ public class OutputManager implements ControllerInputListener {
         }
     }
 
-    // todo docs
     public void loadBindingsFromFile(String filename) throws FileNotFoundException {
         loadBindingsFromFile(new File(filename));
     }
 
-    /// todo docs
     public void loadBindingsFromFile(File file) throws FileNotFoundException {
         bindings.loadBindingsFromFile(file);
     }
@@ -82,18 +80,7 @@ public class OutputManager implements ControllerInputListener {
 
     @Override
     public boolean buttonPressed(Button button) {
-        // todo comment removal
-//        System.out.println("Pressed: " + button.toString());
-        KeyMap keyMap = bindings.getBinding(button);
-        /*// Determine action for button
-        switch (button) {
-            // Buttons that can be held
-            case LB, RB, DOWN -> keyboard.holdBinding(button);
-            // Mouse buttons
-            case LT, RT -> mouseButtons.press(button);
-            // Any button that cannot be held
-            default -> keyboard.pressBinding(button);
-        }*/
+        KeyMap keyMap = bindings.getKeyMap(button);
 
         boolean terminate = false;
         switch (keyMap.type()) {
@@ -108,16 +95,7 @@ public class OutputManager implements ControllerInputListener {
 
     @Override
     public boolean buttonReleased(Button button) {
-        // todo comment removal
-//        System.out.println("Released: " + button.toString());
-        KeyMap keyMap = bindings.getBinding(button);
-        /*// Determine action for button
-        switch (button) {
-            // Buttons that can be held
-            case LB, RB, DOWN -> keyboard.releaseBinding(button);
-            // Mouse buttons
-            case LT, RT -> mouseButtons.release(button);
-        }*/
+        KeyMap keyMap = bindings.getKeyMap(button);
 
         switch (keyMap.type()) {
             case KEYBOARD_HOLDABLE -> keyboard.releaseBinding(keyMap);
