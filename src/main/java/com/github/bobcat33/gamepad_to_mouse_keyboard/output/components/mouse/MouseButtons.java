@@ -1,7 +1,7 @@
-package com.github.bobcat33.gamepadmousecontroller.output.components.mouse;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.mouse;
 
-import com.github.bobcat33.gamepadmousecontroller.output.components.OutputComponent;
-import com.github.bobcat33.gamepadmousecontroller.output.components.binding.KeyMap;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.OutputComponent;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.binding.KeyMap;
 
 import java.awt.*;
 import java.awt.event.InputEvent;

@@ -1,8 +1,8 @@
-package com.github.bobcat33.gamepadmousecontroller.output.components.binding;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.binding;
 
-import com.github.bobcat33.gamepadmousecontroller.input.components.Button;
-import com.github.bobcat33.gamepadmousecontroller.output.components.keyboard.Keyboard;
-import com.github.bobcat33.gamepadmousecontroller.output.components.mouse.MouseButtons;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.input.components.Button;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.keyboard.Keyboard;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.mouse.MouseButtons;
 
 import java.io.File;
 import java.io.FileNotFoundException;

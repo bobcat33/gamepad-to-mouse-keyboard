@@ -1,6 +1,6 @@
-package com.github.bobcat33.gamepadmousecontroller.output.components.mouse;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.mouse;
 
-import com.github.bobcat33.gamepadmousecontroller.output.components.binding.KeyMap;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.binding.KeyMap;
 
 public class InvalidMouseButtonException extends RuntimeException {
 

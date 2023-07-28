@@ -1,4 +1,4 @@
-package com.github.bobcat33.gamepadmousecontroller.input;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.input;
 
 public class AlreadyRunningException extends Exception {
 

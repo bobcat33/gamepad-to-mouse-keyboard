@@ -1,4 +1,4 @@
-package com.github.bobcat33.gamepadmousecontroller.originalfx;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.originalfx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

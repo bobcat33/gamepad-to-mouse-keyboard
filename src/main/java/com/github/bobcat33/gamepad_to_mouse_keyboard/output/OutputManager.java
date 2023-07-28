@@ -1,15 +1,15 @@
-package com.github.bobcat33.gamepadmousecontroller.output;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.output;
 
-import com.github.bobcat33.gamepadmousecontroller.input.components.Button;
-import com.github.bobcat33.gamepadmousecontroller.input.components.ButtonState;
-import com.github.bobcat33.gamepadmousecontroller.input.ControllerInputListener;
-import com.github.bobcat33.gamepadmousecontroller.input.components.Joystick;
-import com.github.bobcat33.gamepadmousecontroller.output.components.binding.KeyMap;
-import com.github.bobcat33.gamepadmousecontroller.output.components.binding.Bindings;
-import com.github.bobcat33.gamepadmousecontroller.output.components.keyboard.Keyboard;
-import com.github.bobcat33.gamepadmousecontroller.output.components.mouse.AlreadyRunningException;
-import com.github.bobcat33.gamepadmousecontroller.output.components.mouse.MouseButtons;
-import com.github.bobcat33.gamepadmousecontroller.output.components.mouse.MouseMover;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.input.components.Button;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.input.components.ButtonState;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.input.ControllerInputListener;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.input.components.Joystick;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.binding.KeyMap;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.binding.Bindings;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.keyboard.Keyboard;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.mouse.AlreadyRunningException;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.mouse.MouseButtons;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.mouse.MouseMover;
 
 import java.awt.*;
 import java.io.File;

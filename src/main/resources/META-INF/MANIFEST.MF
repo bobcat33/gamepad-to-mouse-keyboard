@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.github.bobcat33.gamepadmousecontroller.Main
+Main-Class: com.github.bobcat33.gamepad_to_mouse_keyboard.Main
 

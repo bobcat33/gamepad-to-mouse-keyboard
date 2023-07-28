@@ -1,4 +1,4 @@
-package com.github.bobcat33.gamepadmousecontroller.output.components;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.output.components;
 
 import java.awt.*;
 

@@ -1,10 +1,9 @@
-package com.github.bobcat33.gamepadmousecontroller;
+package com.github.bobcat33.gamepad_to_mouse_keyboard;
 
-import com.github.bobcat33.gamepadmousecontroller.input.ControllerInputManager;
-import com.github.bobcat33.gamepadmousecontroller.input.AlreadyRunningException;
-import com.github.bobcat33.gamepadmousecontroller.output.OutputManager;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.input.ControllerInputManager;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.input.AlreadyRunningException;
+import com.github.bobcat33.gamepad_to_mouse_keyboard.output.OutputManager;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Main {

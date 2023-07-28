@@ -1,4 +1,4 @@
-package com.github.bobcat33.gamepadmousecontroller.input.components;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.input.components;
 
 import com.studiohartman.jamepad.ControllerState;
 

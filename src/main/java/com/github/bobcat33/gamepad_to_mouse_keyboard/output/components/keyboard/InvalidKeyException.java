@@ -1,4 +1,4 @@
-package com.github.bobcat33.gamepadmousecontroller.output.components.keyboard;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.keyboard;
 
 public class InvalidKeyException extends RuntimeException {
 

@@ -70,7 +70,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.github.bobcat33.gamepadmousecontroller/com.github.bobcat33.gamepadmousecontroller.originalfx.HelloApplication
+                                com.github.bobcat33.gamepadmousecontroller/com.github.bobcat33.gamepad_to_mouse_keyboard.originalfx.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

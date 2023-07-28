@@ -1,4 +1,4 @@
-package com.github.bobcat33.gamepadmousecontroller.output.components.binding;
+package com.github.bobcat33.gamepad_to_mouse_keyboard.output.components.binding;
 
 class InvalidBindingsFileException extends Exception {
 
