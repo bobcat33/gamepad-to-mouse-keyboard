@@ -2,7 +2,7 @@
   <artifact type="jar" name="GamepadMouseController:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/GamepadMouseController_jar</output-path>
     <root id="archive" name="GamepadMouseController.jar">
-      <element id="module-output" name="GamepadMouseController" />
+      <element id="module-output" name="gamepad-to-mouse-keyboard" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/badlogicgames/jamepad/jamepad/2.0.20.0/jamepad-2.0.20.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/19-ea+7/javafx-fxml-19-ea+7-win.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/19-ea+7/javafx-fxml-19-ea+7.jar" path-in-jar="/" />
